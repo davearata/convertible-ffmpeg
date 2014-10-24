@@ -1,18 +1,24 @@
 /*global describe,it*/
 'use strict';
 var assert = require('assert');
-var convertibleFFMpeg = require('../lib').Strategy;
 var sinon = require('sinon');
 var ffmpeg = require('fluent-ffmpeg');
 var requireSubvert = require('require-subvert')(__dirname);
 
 var sandbox;
 var FFMpegStrategy;
+var command;
 
 describe('convertible-ffmpeg node module.', function() {
   beforeEach(function() {
-    FFMpegStrategy = new convertibleFFMpeg();
     sandbox = sinon.sandbox.create();
+    requireSubvert.subvert('fluent-ffmpeg', function(input) {
+      command = ffmpeg(input);
+      sandbox.stub(command, 'save');
+      return command;
+    });
+    var ConvertibleStrategy = requireSubvert.require('../lib/strategy');
+    FFMpegStrategy = new ConvertibleStrategy();
   });
 
   afterEach(function () {
@@ -54,14 +60,6 @@ describe('convertible-ffmpeg node module.', function() {
   });
 
   it('should apply the options passed in and call save', function() {
-    var command;
-    requireSubvert.subvert('fluent-ffmpeg', function(input) {
-      command = ffmpeg(input);
-      sandbox.spy(command, 'save');
-      return command;
-    });
-    var ConvertibleStrategy = requireSubvert.require('../lib/strategy');
-    FFMpegStrategy = new ConvertibleStrategy();
     FFMpegStrategy.transcode({
       path: 'input.avi',
       outputPath: 'output.mp4',
