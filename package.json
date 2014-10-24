@@ -1,0 +1,44 @@
+{
+  "name": "convertible-ffmpeg",
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "description": "Convertible Strategy for transcoding with ffmpeg",
+  "homepage": "https://github.com/davearata/convertible-ffmpeg",
+  "bugs": "https://github.com/davearata/convertible-ffmpeg/issues",
+  "author": {
+    "name": "Dave Arata",
+    "email": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/davearata/convertible-ffmpeg"
+  },
+  "license": "MIT",
+  "files": [
+    "lib"
+  ],
+  "keywords": [
+    "convertible-ffmpeg",
+    "transcode",
+    "transcoder",
+    "ffmpeg",
+    "node"
+  ],
+  "devDependencies": {
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-nodeunit": "^0.3.3",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-mocha-cli": "^1.9.0",
+    "jshint-stylish": "^0.2.0",
+    "load-grunt-tasks": "^0.4.0",
+    "require-subvert": "^0.1.0",
+    "sinon": "^1.10.3",
+    "time-grunt": "^0.3.1"
+  },
+  "scripts": {
+    "test": "grunt"
+  },
+  "dependencies": {
+    "fluent-ffmpeg": "^2.0.0-rc2"
+  }
+}
