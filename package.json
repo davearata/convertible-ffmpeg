@@ -1,6 +1,6 @@
 {
   "name": "convertible-ffmpeg",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "lib/index.js",
   "description": "Convertible Strategy for transcoding with ffmpeg",
   "homepage": "https://github.com/davearata/convertible-ffmpeg",
