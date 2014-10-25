@@ -4,6 +4,7 @@ var assert = require('assert');
 var sinon = require('sinon');
 var ffmpeg = require('fluent-ffmpeg');
 var requireSubvert = require('require-subvert')(__dirname);
+var Writable = require('stream').Writable;
 
 var sandbox;
 var FFMpegStrategy;
@@ -14,7 +15,7 @@ describe('convertible-ffmpeg node module.', function() {
     sandbox = sinon.sandbox.create();
     requireSubvert.subvert('fluent-ffmpeg', function(input) {
       command = ffmpeg(input);
-      sandbox.stub(command, 'save');
+      sandbox.stub(command, 'run');
       return command;
     });
     var ConvertibleStrategy = requireSubvert.require('../lib/strategy');
@@ -40,6 +41,15 @@ describe('convertible-ffmpeg node module.', function() {
     }, /You must specify an outputPath in the options/);
   });
 
+  it('should throw an error if you call transcode with a writestream outputPath and do not provide a format', function() {
+    assert.throws(function() {
+      FFMpegStrategy.transcode({
+        path: 'input.avi',
+        outputPath: new Writable()
+      });
+    }, /When using a stream as your output you must specify outputFormat/);
+  });
+
   it('should not call applyOptions if preset is passed in the options', function() {
     sandbox.spy(FFMpegStrategy, 'applyOptions');
     FFMpegStrategy.transcode({
@@ -59,7 +69,7 @@ describe('convertible-ffmpeg node module.', function() {
     assert(FFMpegStrategy.applyOptions.calledOnce);
   });
 
-  it('should apply the options passed in and call save', function() {
+  it('should apply the options passed in and call run', function() {
     FFMpegStrategy.transcode({
       path: 'input.avi',
       outputPath: 'output.mp4',
@@ -75,6 +85,6 @@ describe('convertible-ffmpeg node module.', function() {
       aspectRatio: '16:9',
       outputFormat: 'mp4'
     });
-    assert(command.save.calledOnce);
+    assert(command.run.calledOnce);
   });
 });
